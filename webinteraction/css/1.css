@@ -1,0 +1,208 @@
+@charset 'utf-8';
+
+
+/*불러온 폰트를 css에 적어줌 보통 홈페이지에 복붙하기있음*/
+html {    
+
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size :14px; /*html문서에 적용되는 전체 폰트 크기*/
+}
+
+body {
+    overflow-x: hidden; /*가로스크롤을 안생기게함*/
+    color:rgb(29,29,31);
+    letter-spacing:-0.05em;
+    background:white;
+}
+p {
+    line-height:1.6;
+}
+
+a {
+    color:rgb(29,29,31);
+    text-decoration:none; /*클릭시 생기는 밑줄을 없애줌*/
+}
+
+
+/*font size 는 rem 으로 쓰고 높이 조절 등은 em 단위로 쓴다 */
+/*이렇게 쓰게되면 기본 설정한 html 폰트 14px을 기준으로 폰트 사이즈 */
+/*비율을 적용해서 쓸수 있는 장점이 있다.*/
+/*즉 em은 현재 적용되는 해당 폰트 사이즈 크기를 바탕으로 계산되는것*/
+/*기본폰트사이즈 * rem = 글자 font-size */
+/*현재폰트사이즈 * em = 크기 조절 pixel-size*/
+
+/*-----------------------------세부설정-------------------------------*/
+.global-nav {
+    height: 44px;   
+    padding:0 1rem; /*상하패딩: 0, 좌우패딩 1rem 뜻*/
+}
+.local-nav {
+    height:52px;
+    border-bottom:1px solid #ddd; /*밑줄 넣기*/
+    padding:0 1rem;
+}
+
+.local-nav-links,
+.global-nav-links {
+    display:flex; /*기본적으로 가로블록정렬*/
+    align-items: center; /*세로방향 중앙정렬*/
+    max-width: 1000px; 
+    height : 100%; /*부모간격만큼 늘려줌*/
+    margin: 0 auto;
+}
+
+.global-nav-links {
+    justify-content: space-between;  /*사이간격 일정하게 벌려줌*/
+}
+
+.local-nav-links .product-name {/*부모클래스 자식클래스를 같이 구체적으로적어줌으로써 자식 클래스에만 적용시킬 수 있게 한다 이렇게 적지 않으면 부모클래스에 적용된 것들이 단체적용되기 때문에 우선순위에서 밀림*/
+    margin-right: auto; /*자신이 갖고있는 모든 마진을 쓰기 때문에 auto로 주면 쭉 늘어난다*/
+    font-size :1.4em;
+    font-weight :bold;
+}
+.local-nav-links a{
+    font-size : 0.8em;
+}
+
+.local-nav-links a:not(.product-name){ /*<a> tag를 모두 설정//not은 local-nav links 에서 not괄호 안에있는 조건을 만족하는 것을 제외하고 적용시킨다는 것 여기서는 Air-mug만 제외하고 다 적용된다 */ 
+    margin-left:2em;
+}
+
+/*Scroll Section-------------------------------------------------------------*/
+.scroll-section {
+    padding-top: 50vh; /*뷰포트 단위 = 인터넷 브라우저 창의 높이*/
+}
+
+/*Scroll Section --0*/
+#scroll-section-0 h1 { /*Id로 불러오기*/
+    font-size : 4rem; /*현재 html 14px로 셋팅되어있음으로 14*4rem해서 64 px로 출력*/
+    text-align:center;
+}
+
+.main-message{
+    display:flex; /*먼저 선언 해줘야 하위 옵션을 쓸 수 있다*/
+    align-items:center; /*div안에서 중앙정렬*/
+    justify-content: center;
+    margin:5px 0;
+    height:3em;
+    font-size:2.5rem;  
+}
+
+.main-message p{
+    font-weight:bold;
+    text-align:center;
+    line-height:1.2;
+}
+
+/*Scroll Section --1*/
+.main-message small {
+    display:block;
+    font-size:1.2rem;
+    margin-bottom:0.5em;
+
+}
+
+.description {
+    padding : 0 1rem;
+    font-size:1.2rem;
+    color:#888;
+    max-width:1000px;
+    margin: 0 auto;
+}
+
+.description strong {
+    float:left; /*lorem글자가 보통 스크롤 영역 글자에 붙도록 왼쪽 정렬줌*/
+    margin-right:0.2em;
+    font-size :3rem;
+    color: rgb(29,29,31);
+}
+
+/*Scroll Section --2*/
+#scroll-section-2 .main-message {
+    font-size : 3.5rem;
+}
+
+.desc-message {
+    width :50%;
+    font-weight : bold;
+}
+
+.pin {
+    width : 1px;
+    height: 100px;
+    background :rgb(29, 29, 31);
+}
+
+/*Scroll Section --3*/
+.mid-message {
+    font-size :2rem;
+    color:#888;
+    padding: 0 1rem;
+    max-width:1000px;
+    margin: 0 auto;
+}
+
+.mid-message strong{
+    color:rgb(29,29,31);    
+}
+
+.canvas-caption {
+    padding: 0 1rem;
+    color: #888;
+    font-size:1.2rem;
+    max-width:1000px;
+    margin: 0 auto;
+}
+
+/*footer ----*/
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 7rem;
+    background: #fff000;
+    color:white;
+}
+
+
+
+/*rem : 고정값 (html px에 따라)*/
+/*vw: 창 크기에 따른 변동값*/
+
+
+@media (min-width : 1024px) { /*창크기가 1024px이상시 하위 css가 적용된다*/
+
+    #scroll-section-0 h1 {
+        font-size: 9vw; /*윈도우 사이즈의 9%크기*/
+    }
+
+    .main-message {
+        font-size : 4vw;
+    }
+
+    .description {
+        
+        font-size: 2rem;  
+             
+    }
+    .description strong {
+        font-size: 6rem;
+    }
+    #scroll-section-2 .main-message {
+        font-size: 6vw;        
+    }
+    .main-message small {
+        font-size: 1.5vw;
+    }
+    .desc-message {
+        width: 20%;
+        font-weight: bold;
+    }
+    .mid-message {
+        font-size: 4vw;
+    }
+    .canvas-caption {
+        font-size: 2rem;
+    }
+}
+
