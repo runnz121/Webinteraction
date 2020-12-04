@@ -50,6 +50,12 @@ a {
     padding:0 1rem;
 }
 
+.local-nav-sticky .local-nav {
+    position: fixed;
+    top: 0;
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .local-nav-links,
 .global-nav-links {
     display:flex; /*기본적으로 가로블록정렬*/
@@ -78,6 +84,7 @@ a {
 
 /*Scroll Section-------------------------------------------------------------*/
 .scroll-section {
+    position: relative;
     padding-top: 50vh; /*뷰포트 단위 = 인터넷 브라우저 창의 높이*/
     border : 3px solid red;
 }
@@ -89,18 +96,20 @@ a {
 }
 
 .main-message{
-    display:flex; /*먼저 선언 해줘야 하위 옵션을 쓸 수 있다*/
-    align-items:center; /*div안에서 중앙정렬*/
+    display: flex; /*먼저 선언 해줘야 하위 옵션을 쓸 수 있다*/
+    align-items: center; /*div안에서 중앙정렬*/
     justify-content: center;
-    margin:5px 0;
-    height:3em;
-    font-size:2.5rem;  
+    margin: 5px 0;
+    height: 3em;
+    font-size: 2.5rem;  
+    opacity : 0;
+    top: 35vh;
 }
 
 .main-message p{
-    font-weight:bold;
-    text-align:center;
-    line-height:1.2;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2;
 }
 
 /*Scroll Section --1*/
