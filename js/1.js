@@ -10,7 +10,7 @@
     let yOffset =0; // window.pageYOffset 대신 쓸 변수 (전역변수) //현재 스크롤 위치( 현재 스크린으로 보여지는 곳)
     let prevScrollHeight = 0; //현재 스크롤 위치 (yOffset)보다 이전에 위치한 스크롤 섹션들의 높이의 합
     let currentScene = 0; //현재 활성화된(= 스크린으로 보고 있는 scene //scroll-Section)
-
+    let enterNewScene = false;//새로운 scene이 시작되는 순간 true로 변환
     const sceneInfo = [  //장면을 4개로 나눠 해당 장면을 배열로 저장하기 위해 생성
 
         { //1번째 객체      
@@ -129,6 +129,7 @@
     
     function scrollLoop() { //스크롤이 얼만큼 되었는지 판별하는 함수  
         
+        enterNewScene = false;
         prevScrollHeight = 0; //초기화 시켜주기위한 값
 
         for(let i = 0; i < currentScene; i++) { //현재 스크린에 나타나는 신이 i값으로 와야함
@@ -136,7 +137,10 @@
         }     
 
         if(yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight){
+            enterNewScene = true; //scene이 넘어가면서 나오는 -값을 없에주기 위해(opacity값)
+            //변수가 true가 되면 그때 새로운 scene으로 넘어간다 라는 뜻
             currentScene++;
+            document.body.setAttribute(`id`,`show-scene-${currentScene}`);
         } //스크롤을 아래로 내릴때 현재 scene 1 ->2 로 넘어가는 시점이라고 가정하면
           //스크롤 위치(yOffset) 값이 전의 신의 스크롤값(0 + 1) 과 현재 스크롤 위치값(yOffset 스크롤 위치 - scene1의 마지막 부분) 보다 
           //커지는 경우 scene의 순번이 바뀐다는 것을 if로 표현
@@ -151,6 +155,8 @@
           //yOffset이 prevScrollHeight + 와 current Scene 값 보다 작아지면 scene 번호가 바뀐다는 것을 표현
 
          //현재 보여지는 scene을 보여줌 
+
+         if (enterNewScene) return;
 
          playAnimaation();
 
@@ -173,4 +179,4 @@
 
 
 
-}) ();
+}) ();//

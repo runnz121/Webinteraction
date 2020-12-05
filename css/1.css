@@ -189,15 +189,16 @@ a {
 
 /*-----------------------sticky-elem 설정-------------------------*/
 
-#Show-scene-0 #scroll-section-0 .sticky-elem,/*body에 붙는 태그*/
-#Show-scene-1 #scroll-section-1 .sticky-elem,/*해당영역만 디스플레이 되도록 설정*/
-#Show-scene-2 #scroll-section-2 .sticky-elem,
-#Show-scene-3 #scroll-section-3 .sticky-elem {
+body#show-scene-0 #scroll-section-0 .sticky-elem,/*body에 붙는 태그*/
+body#show-scene-1 #scroll-section-1 .sticky-elem, /*해당영역만 디스플레이 되도록 설정*/
+body#show-scene-2 #scroll-section-2 .sticky-elem, /*body#show-scene-x 가 붙으면 scoll-section-x의 sticky-elem만 보여준다 */
+body#show-scene-3 #scroll-section-3 .sticky-elem {
     display: block;
+    will-change : transform, opacity;
 }
 
 .sticky-elem {
-    display:none; /*디스플레이에 안보이게 처리*/
+    display: none; /*디스플레이에 안보이게 처리*/
     position: fixed; /*스크롤 올려서 화면 탑에 걸리면 그때부터 고정*/
     top: 0;
     left: 0;
