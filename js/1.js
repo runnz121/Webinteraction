@@ -172,7 +172,7 @@
     });
     // window.addEventListener(`DOMContentLoaded`, setLayout);//htML 콘텐트만 로딩되면 바로 시작
     window.addEventListener('load', setLayout);//모든 이미지 로드하고나서 초기화
-    window.addEventListener('resize', setLayout);
+    window.addEventListener('resize', setLayout); //
 
 
     setLayout();
