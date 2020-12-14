@@ -99,6 +99,7 @@ a {
     display: flex; /*먼저 선언 해줘야 하위 옵션을 쓸 수 있다*/
     align-items: center; /*div안에서 중앙정렬*/
     justify-content: center;
+    top: 35vh;
     margin: 5px 0;
     height: 3em;
     font-size: 2.5rem;  
@@ -151,6 +152,21 @@ a {
     background :rgb(29, 29, 31);
 }
 
+#scroll-section-2 .b {
+    top: 10%;
+    left: 40%;
+}
+
+#scroll-section-2 .c {
+    top: 15%;
+    left: 45%;
+}
+
+
+
+
+
+
 /*Scroll Section --3*/
 .mid-message {
     font-size :2rem;
@@ -200,7 +216,6 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
 .sticky-elem {
     display: none; /*디스플레이에 안보이게 처리*/
     position: fixed; /*스크롤 올려서 화면 탑에 걸리면 그때부터 고정*/
-    top: 0;
     left: 0;
     width: 100%;
 
@@ -250,6 +265,20 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
         width: 20%;
         font-weight: bold;
     }
+    #scroll-section-2 .b {
+        top: 20%;
+        left: 53%;
+    }
+
+    #scroll-section-2 .c {
+       
+        left: 55%;
+    }
+
+
+
+
+
     .mid-message {
         font-size: 4vw;
     }

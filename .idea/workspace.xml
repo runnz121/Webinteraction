@@ -11,8 +11,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70c1e7c0-c165-4100-b279-0085de9726ee" name="Default Changelist" comment="update css js">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/css/1.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/1.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/1.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/1.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +54,8 @@
       <workItem from="1606743700860" duration="187000" />
       <workItem from="1606743894999" duration="120000" />
       <workItem from="1607092994492" duration="1395000" />
+      <workItem from="1607957354251" duration="10000" />
+      <workItem from="1607957377058" duration="665000" />
     </task>
     <task id="LOCAL-00001" summary="update css js">
       <created>1606743938719</created>
