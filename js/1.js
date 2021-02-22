@@ -23,7 +23,12 @@
                 messageB: document.querySelector('#scroll-section-0 .main-message.b'),
                 messageC: document.querySelector('#scroll-section-0 .main-message.c'),
                 messageD: document.querySelector('#scroll-section-0 .main-message.d'),
+                canvas: document.querySelector('#video-canvas-0'),                   //canvas 이용하기 위한 id값 가져오기
+                context: document.querySelector('#video-canvas-0').getContext('2d'), //canvas context 객체 정의
+                videoImages: [] //이미지를 넣을 배열
             },
+
+            //첫번째가 초기값, 2번재부터 목적 값 ==> 이미지 순서설정
             values : {//message에 어떤값을 줄지 전달
                 /*messageA_opacity_in: [0, 1, {start:0.1, end:0.2}], //messageA 투명도 조절 투명도가 0 ->1로 변경
                 messageA_translateY_in: [20, 0,{start:0.1, end:0.2}], 
@@ -33,6 +38,10 @@
                 messageA_translateY_out: [0,-20, {start:0.25, end:0.3}] */
 
             //하위 내용들은 편의를 위해 복붙한것
+            videoImageCount: 300,       //이미지갯수
+            imageSequence: [0, 299],    //이미지순서
+            canvas_opacity:[1, 0 , {start: 0.9, end: 1}], //이미지 서서히 사라지게 하기위함
+
             messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
             messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
             messageC_opacity_in: [0, 1, { start: 0.5, end: 0.6 }],
@@ -78,9 +87,17 @@
                 messageB: document.querySelector('#scroll-section-2 .b'),
                 messageC: document.querySelector('#scroll-section-2 .c'),
                 pinB: document.querySelector('#scroll-section-2 .b .pin'),
-                pinC: document.querySelector('#scroll-section-2 .c .pin')
+                pinC: document.querySelector('#scroll-section-2 .c .pin'),
+                canvas: document.querySelector('#video-canvas-1'),                   //canvas 이용하기 위한 id값 가져오기
+                context: document.querySelector('#video-canvas-1').getContext('2d'), //canvas context 객체 정의
+                videoImages: [] //이미지를 넣을 배열
             },
             values: {
+                videoImageCount: 960,       //이미지갯수
+                imageSequence: [0, 959],    //이미지순서
+                canvas_opacity_in:[0, 1 , {start: 0, end: 0.1}], //이미지 서서히 사라지게 하기위함
+                canvas_opacity_out:[1, 0 , {start: 0.95, end: 1}], //이미지 서서히 사라지게 하기위함
+
                 messageA_translateY_in: [20, 0, { start: 0.15, end: 0.2 }],
                 messageB_translateY_in: [30, 0, { start: 0.6, end: 0.65 }],
                 messageC_translateY_in: [30, 0, { start: 0.87, end: 0.92 }],
@@ -114,6 +131,25 @@
     }
 ];
 
+    function setCanvasImages() {    //canvas에 그려서 처리할 이미지 함수
+        let imgElem;
+        for(let i=0; i<sceneInfo[0].values.videoImageCount; i++) {
+            imgElem = document.createElement('img'); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
+            imgElem.src = `./001/IMG_${6726 + i}.JPG` //imgElem의 주소 설정 및 img 반복 설정
+            sceneInfo[0].objs.videoImages.push(imgElem); //배열에 해당 img를 push
+        }
+
+        //3번째 섹션의 그림 설정
+        let imgElem2;
+        for(let i=0; i<sceneInfo[2].values.videoImageCount; i++) {
+            imgElem2 = document.createElement('img'); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
+            imgElem2.src = `./002/IMG_${7027 + i}.JPG` //imgElem의 주소 설정 및 img 반복 설정
+            sceneInfo[2].objs.videoImages.push(imgElem2); //배열에 해당 img를 push
+        }
+        
+    }
+    setCanvasImages();
+
 
 
     
@@ -142,7 +178,17 @@
             }
         }
         document.body.setAttribute(`id`,`show-scene-${currentScene}`);
+
+        //canvas의 크기 조절
+        const heightRatio = window.innerHeight / 1080; //원래 캔버스 높이대비 윈도우 창 높이
+
+        //translate3d의 속성을 이용해 왼쪽, 오른쪽 -50%땡겨온다 (css 에선 50%씩 늘려놨었음 .sticky-elem-canvas canvas 참고)
+        sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`; //첫번째 섹션 그림
+        sceneInfo[2].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`; //세번째 섹션 그림
    }
+
+
+   
 
 
                             //currentYOffset 현재 scene에서 얼마만큼 scroll 되었는지 현상태
@@ -190,6 +236,13 @@
        switch(currentScene) { //조건문으로 해당 scene만 play시킴 분기 나눔
       case 0:
             // console.log('0 play');
+            let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));//이미지 인덱스를 위한 계산 처리
+            objs.context.drawImage(objs.videoImages[sequence], 0, 0);//canvas의 drawimage를 통해 vidoImages배열에 넣은 이미지를 위에서 계산한
+            //sequence를 통해 인덱스로 사용하여 그림, 0,0은 x,y 축 초기화
+            objs.canvas.style.opacity = calcValues(values.canvas_opacity, currentYOffset);
+            //opacity설정해서 스크롤 내릴때 이미지 서서히 사라지게끔 설정
+            
+
             if (scrollRatio <= 0.22) { //translate3d는 (x,y,z) 값이 들어감 또한 하드웨어 가속이 보장됨으로 성능향상이
                 // in
                 objs.messageA.style.opacity = calcValues(values.messageA_opacity_in, currentYOffset);
@@ -235,6 +288,21 @@
 
         case 2:
             // console.log('2 play');
+            let sequence2 = Math.round(calcValues(values.imageSequence, currentYOffset));//이미지 인덱스를 위한 계산 처리
+            objs.context.drawImage(objs.videoImages[sequence2], 0, 0);//canvas의 drawimage를 통해 vidoImages배열
+
+
+
+
+            if(scrollRatio <= 0.5) {
+                //in
+                objs.canvas.style.opacity = calcValues(values.canvas_opacity_in, currentYOffset);
+            } else {
+                //out
+                objs.canvas.style.opacity = calcValues(values.canvas_opacity_out, currentYOffset);
+            }
+
+
             if (scrollRatio <= 0.32) {
                 // in
                 objs.messageA.style.opacity = calcValues(values.messageA_opacity_in, currentYOffset);
@@ -324,8 +392,11 @@
         scrollLoop();
     });
     // window.addEventListener(`DOMContentLoaded`, setLayout);//htML 콘텐트만 로딩되면 바로 시작
-    window.addEventListener('load', setLayout);//모든 이미지 로드하고나서 초기화
-    window.addEventListener('resize', setLayout); //
+    window.addEventListener('load', () => {         //익명함수로 여러 함수 호출
+        setLayout();
+        sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0],0,0);//새로고침시 이미지 처음 그리고 시작 하기 위한 설정
+    });//윈도우 로드됫리 이벤트 발생
+    window.addEventListener('resize', setLayout); //윈도우 창 재 조절시 이벤트 발생
 
 
     setLayout();

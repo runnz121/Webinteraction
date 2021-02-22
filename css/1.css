@@ -39,6 +39,8 @@ a {
     width: 100%; /*position absolute인 경우 width:100%지정해줘야 넓어진다 */
     height: 44px;   
     padding:0 1rem; /*상하패딩: 0, 좌우패딩 1rem 뜻*/
+
+    z-index:10;
 }
 .local-nav {
     position: absolute;
@@ -48,6 +50,8 @@ a {
     height:52px;
     border-bottom:1px solid #ddd; /*밑줄 넣기*/
     padding:0 1rem;
+
+    z-index: 11;
 }
 
 .local-nav-sticky .local-nav {
@@ -86,11 +90,14 @@ a {
 .scroll-section {
     position: relative;
     padding-top: 50vh; /*뷰포트 단위 = 인터넷 브라우저 창의 높이*/
-    border : 3px solid red;
+    /*border : 3px solid red;*/
 }
 
 /*Scroll Section --0*/
 #scroll-section-0 h1 { /*Id로 불러오기*/
+    position: relative; /* canvas 설정후 글자가 나오지 않는것을 수정하기위해 포지션 및 z-index설정*/
+    top: -10vh;
+    z-index: 5;
     font-size : 4rem; /*현재 html 14px로 셋팅되어있음으로 14*4rem해서 64 px로 출력*/
     text-align:center;
 }
@@ -144,6 +151,7 @@ a {
 .desc-message {
     width :50%;
     font-weight : bold;
+    opacity: 0;
 }
 
 .pin {
@@ -222,17 +230,18 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
 }
 
 
+.sticky-elem-canvas {
+    top: 0;
+    height : 100%;
+    
+}
 
+.sticky-elem-canvas canvas {
+    position: absolute;
+    top: 50%; /*이미 top은 0 이다*/
+    left: 50%;
 
-
-
-
-
-
-
-
-
-
+}
 
 
 
