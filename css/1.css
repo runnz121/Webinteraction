@@ -244,7 +244,18 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
 }
 
 
+.image-blend-canvas.sticky {
+	position: fixed;
+	top: 0;
+	z-index: 10;
+}
 
+#scroll-section-3 {
+     display: flex;
+     flex-direction: column;/*flex는 기본 가로 배치임으로 세로배치로 바꾸기 위해 설정*/
+     align-items: center;
+     
+ }
 
 @media (min-width : 1024px) { /*창크기가 1024px이상시 하위 css가 적용된다*/
 

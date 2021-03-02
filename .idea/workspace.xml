@@ -10,13 +10,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="70c1e7c0-c165-4100-b279-0085de9726ee" name="Default Changelist" comment="update css js">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.html" beforeDir="false" afterPath="$PROJECT_DIR$/1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/1.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/1.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/1.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/1.js" afterDir="false" />
-    </list>
+    <list default="true" id="70c1e7c0-c165-4100-b279-0085de9726ee" name="Default Changelist" comment="update css js" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,7 +31,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../새 폴더" />
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -57,6 +51,7 @@
       <workItem from="1607092994492" duration="1395000" />
       <workItem from="1607957354251" duration="10000" />
       <workItem from="1607957377058" duration="933000" />
+      <workItem from="1613481921980" duration="100000" />
     </task>
     <task id="LOCAL-00001" summary="update css js">
       <created>1606743938719</created>
@@ -92,10 +87,11 @@
       <screen x="-1080" y="-526" width="1080" height="1880" />
     </state>
     <state x="-765" y="214" key="#com.intellij.fileTypes.FileTypeChooser/-3240.-1434.1440.2533/0.0.3840.1560/3840.-246.2560.1400/-1080.-526.1080.1880@-1080.-526.1080.1880" timestamp="1607093243242" />
-    <state x="1700" y="521" key="FileChooserDialogImpl" timestamp="1607094388320">
+    <state x="1700" y="521" key="FileChooserDialogImpl" timestamp="1613482013521">
       <screen x="0" y="0" width="3840" height="1560" />
     </state>
     <state x="1700" y="521" key="FileChooserDialogImpl/-3240.-1434.1440.2533/0.0.3840.1560/3840.-246.2560.1400/-1080.-526.1080.1880@0.0.3840.1560" timestamp="1607094388320" />
+    <state x="1700" y="521" key="FileChooserDialogImpl/0.0.3840.1560/-3840.0.2560.1400/3840.0.2560.1400@0.0.3840.1560" timestamp="1613482013521" />
     <state x="1421" y="424" key="SettingsEditor" timestamp="1607093356891">
       <screen x="0" y="0" width="3840" height="1560" />
     </state>

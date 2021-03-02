@@ -11,130 +11,136 @@
     let prevScrollHeight = 0; //현재 스크롤 위치 (yOffset)보다 이전에 위치한 스크롤 섹션들의 높이의 합
     let currentScene = 0; //현재 활성화된(= 스크린으로 보고 있는 scene //scroll-Section)
     let enterNewScene = false;//새로운 scene이 시작되는 순간 true로 변환
-    const sceneInfo = [  //장면을 4개로 나눠 해당 장면을 배열로 저장하기 위해 생성
+    const sceneInfo = [
+      //장면을 4개로 나눠 해당 장면을 배열로 저장하기 위해 생성
 
-        { //0번째 객체      
-            type: 'sticky',      //sticky-elem 은 sticky 아니면 normal로 타입 정함
-            heightNum: 5,        //브라우저 높이의 5배로 scrollHeight 새팅
-            scrollHeight : 0,    //각 구간의 스크롤 높이의 정보를 저장하기위한 변수
-            objs: {              //HTML 객체를 모아놓는 객체를 만듬 각 section의 ID를 저장
-                container: document.querySelector('#scroll-section-0'),
-                messageA: document.querySelector('#scroll-section-0 .main-message.a'),
-                messageB: document.querySelector('#scroll-section-0 .main-message.b'),
-                messageC: document.querySelector('#scroll-section-0 .main-message.c'),
-                messageD: document.querySelector('#scroll-section-0 .main-message.d'),
-                canvas: document.querySelector('#video-canvas-0'),                   //canvas 이용하기 위한 id값 가져오기
-                context: document.querySelector('#video-canvas-0').getContext('2d'), //canvas context 객체 정의
-                videoImages: [] //이미지를 넣을 배열
-            },
+      {
+        //0번째 객체
+        type: "sticky", //sticky-elem 은 sticky 아니면 normal로 타입 정함
+        heightNum: 5, //브라우저 높이의 5배로 scrollHeight 새팅
+        scrollHeight: 0, //각 구간의 스크롤 높이의 정보를 저장하기위한 변수
+        objs: {
+          //HTML 객체를 모아놓는 객체를 만듬 각 section의 ID를 저장
+          container: document.querySelector("#scroll-section-0"),
+          messageA: document.querySelector("#scroll-section-0 .main-message.a"),
+          messageB: document.querySelector("#scroll-section-0 .main-message.b"),
+          messageC: document.querySelector("#scroll-section-0 .main-message.c"),
+          messageD: document.querySelector("#scroll-section-0 .main-message.d"),
+          canvas: document.querySelector("#video-canvas-0"), //canvas 이용하기 위한 id값 가져오기
+          context: document.querySelector("#video-canvas-0").getContext("2d"), //canvas context 객체 정의
+          videoImages: [], //이미지를 넣을 배열
+        },
 
-            //첫번째가 초기값, 2번재부터 목적 값 ==> 이미지 순서설정
-            values : {//message에 어떤값을 줄지 전달
-                /*messageA_opacity_in: [0, 1, {start:0.1, end:0.2}], //messageA 투명도 조절 투명도가 0 ->1로 변경
+        //첫번째가 초기값, 2번재부터 목적 값 ==> 이미지 순서설정
+        values: {
+          //message에 어떤값을 줄지 전달
+          /*messageA_opacity_in: [0, 1, {start:0.1, end:0.2}], //messageA 투명도 조절 투명도가 0 ->1로 변경
                 messageA_translateY_in: [20, 0,{start:0.1, end:0.2}], 
                 //messageB_opacity_in: [0, 1, {start:0.3, end:0.4}], //start end는 애니메이션이 재생되는 구간을 비율로 설정
                 messageA_opacity_out: [1, 0, {start:0.25, end:0.3}],
                 //글씨가 살짝 아래있다가 위로 살짝 올라오는것을 표현             
                 messageA_translateY_out: [0,-20, {start:0.25, end:0.3}] */
 
-            //하위 내용들은 편의를 위해 복붙한것
-            videoImageCount: 300,       //이미지갯수
-            imageSequence: [0, 299],    //이미지순서
-            canvas_opacity:[1, 0 , {start: 0.9, end: 1}], //이미지 서서히 사라지게 하기위함
+          //하위 내용들은 편의를 위해 복붙한것
+          videoImageCount: 300, //이미지갯수
+          imageSequence: [0, 299], //이미지순서
+          canvas_opacity: [1, 0, { start: 0.9, end: 1 }], //이미지 서서히 사라지게 하기위함
 
-            messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
-            messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
-            messageC_opacity_in: [0, 1, { start: 0.5, end: 0.6 }],
-            messageD_opacity_in: [0, 1, { start: 0.7, end: 0.8 }],
-            messageA_translateY_in: [20, 0, { start: 0.1, end: 0.2 }],
-            messageB_translateY_in: [20, 0, { start: 0.3, end: 0.4 }],
-            messageC_translateY_in: [20, 0, { start: 0.5, end: 0.6 }],
-            messageD_translateY_in: [20, 0, { start: 0.7, end: 0.8 }],
-            messageA_opacity_out: [1, 0, { start: 0.25, end: 0.3 }],
-            messageB_opacity_out: [1, 0, { start: 0.45, end: 0.5 }],
-            messageC_opacity_out: [1, 0, { start: 0.65, end: 0.7 }],
-            messageD_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
-            messageA_translateY_out: [0, -20, { start: 0.25, end: 0.3 }],
-            messageB_translateY_out: [0, -20, { start: 0.45, end: 0.5 }],
-            messageC_translateY_out: [0, -20, { start: 0.65, end: 0.7 }],
-            messageD_translateY_out: [0, -20, { start: 0.85, end: 0.9 }]
-
-
-                
-            }
+          messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
+          messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
+          messageC_opacity_in: [0, 1, { start: 0.5, end: 0.6 }],
+          messageD_opacity_in: [0, 1, { start: 0.7, end: 0.8 }],
+          messageA_translateY_in: [20, 0, { start: 0.1, end: 0.2 }],
+          messageB_translateY_in: [20, 0, { start: 0.3, end: 0.4 }],
+          messageC_translateY_in: [20, 0, { start: 0.5, end: 0.6 }],
+          messageD_translateY_in: [20, 0, { start: 0.7, end: 0.8 }],
+          messageA_opacity_out: [1, 0, { start: 0.25, end: 0.3 }],
+          messageB_opacity_out: [1, 0, { start: 0.45, end: 0.5 }],
+          messageC_opacity_out: [1, 0, { start: 0.65, end: 0.7 }],
+          messageD_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
+          messageA_translateY_out: [0, -20, { start: 0.25, end: 0.3 }],
+          messageB_translateY_out: [0, -20, { start: 0.45, end: 0.5 }],
+          messageC_translateY_out: [0, -20, { start: 0.65, end: 0.7 }],
+          messageD_translateY_out: [0, -20, { start: 0.85, end: 0.9 }],
         },
+      },
 
-
-        { //1번째 객체
-            type: 'normal',//sticky는 고정되어있으면서 반응이 있는 것들을 처리
-            //heightNum: 5,  : 원래는 scrollheight 결정할떄 innerheight의 몇배로 할건지 정해주는 거였는데 어차피 
-            //이 section은 default높이로 쓸거라서 필요 없음
-            scrollHeight : 0,    
-            objs: {              
-                container: document.querySelector('#scroll-section-1')
-            }
-
+      {
+        //1번째 객체
+        type: "normal", //sticky는 고정되어있으면서 반응이 있는 것들을 처리
+        //heightNum: 5,  : 원래는 scrollheight 결정할떄 innerheight의 몇배로 할건지 정해주는 거였는데 어차피
+        //이 section은 default높이로 쓸거라서 필요 없음
+        scrollHeight: 0,
+        objs: {
+          container: document.querySelector("#scroll-section-1"),
         },
+      },
 
-
-        { //2번째 객체
-            type: 'sticky',//일반 스크롤로 흘러가는 구간을 처리함
-            heightNum: 5,        
-            scrollHeight : 0,   
-            objs: {              
-                container: document.querySelector('#scroll-section-2'),
-                messageA: document.querySelector('#scroll-section-2 .a'),
-                messageB: document.querySelector('#scroll-section-2 .b'),
-                messageC: document.querySelector('#scroll-section-2 .c'),
-                pinB: document.querySelector('#scroll-section-2 .b .pin'),
-                pinC: document.querySelector('#scroll-section-2 .c .pin'),
-                canvas: document.querySelector('#video-canvas-1'),                   //canvas 이용하기 위한 id값 가져오기
-                context: document.querySelector('#video-canvas-1').getContext('2d'), //canvas context 객체 정의
-                videoImages: [] //이미지를 넣을 배열
-            },
-            values: {
-                videoImageCount: 960,       //이미지갯수
-                imageSequence: [0, 959],    //이미지순서
-                canvas_opacity_in:[0, 1 , {start: 0, end: 0.1}], //이미지 서서히 사라지게 하기위함
-                canvas_opacity_out:[1, 0 , {start: 0.95, end: 1}], //이미지 서서히 사라지게 하기위함
-
-                messageA_translateY_in: [20, 0, { start: 0.15, end: 0.2 }],
-                messageB_translateY_in: [30, 0, { start: 0.6, end: 0.65 }],
-                messageC_translateY_in: [30, 0, { start: 0.87, end: 0.92 }],
-                messageA_opacity_in: [0, 1, { start: 0.25, end: 0.3 }],
-                messageB_opacity_in: [0, 1, { start: 0.6, end: 0.65 }],
-                messageC_opacity_in: [0, 1, { start: 0.87, end: 0.92 }],
-                messageA_translateY_out: [0, -20, { start: 0.4, end: 0.45 }],
-                messageB_translateY_out: [0, -20, { start: 0.68, end: 0.73 }],
-                messageC_translateY_out: [0, -20, { start: 0.95, end: 1 }],
-                messageA_opacity_out: [1, 0, { start: 0.4, end: 0.45 }],
-                messageB_opacity_out: [1, 0, { start: 0.68, end: 0.73 }],
-                messageC_opacity_out: [1, 0, { start: 0.95, end: 1 }],
-                pinB_scaleY: [0.5, 1, { start: 0.6, end: 0.65 }],
-                pinC_scaleY: [0.5, 1, { start: 0.87, end: 0.92 }] 
-            }
-
-        },
-
-    {
-        // 3
-        type: 'sticky',
+      {
+        //2번째 객체
+        type: "sticky", //일반 스크롤로 흘러가는 구간을 처리함
         heightNum: 5,
         scrollHeight: 0,
         objs: {
-            container: document.querySelector('#scroll-section-3'),
-            canvasCaption: document.querySelector('.canvas-caption')
+          container: document.querySelector("#scroll-section-2"),
+          messageA: document.querySelector("#scroll-section-2 .a"),
+          messageB: document.querySelector("#scroll-section-2 .b"),
+          messageC: document.querySelector("#scroll-section-2 .c"),
+          pinB: document.querySelector("#scroll-section-2 .b .pin"),
+          pinC: document.querySelector("#scroll-section-2 .c .pin"),
+          canvas: document.querySelector("#video-canvas-1"), //canvas 이용하기 위한 id값 가져오기
+          context: document.querySelector("#video-canvas-1").getContext("2d"), //canvas context 객체 정의
+          videoImages: [], //이미지를 넣을 배열
         },
         values: {
+          videoImageCount: 960, //이미지갯수
+          imageSequence: [0, 959], //이미지순서
+          canvas_opacity_in: [0, 1, { start: 0, end: 0.1 }], //이미지 서서히 사라지게 하기위함
+          canvas_opacity_out: [1, 0, { start: 0.95, end: 1 }], //이미지 서서히 사라지게 하기위함
 
-        }
-    }
-];
+          messageA_translateY_in: [20, 0, { start: 0.15, end: 0.2 }],
+          messageB_translateY_in: [30, 0, { start: 0.6, end: 0.65 }],
+          messageC_translateY_in: [30, 0, { start: 0.87, end: 0.92 }],
+          messageA_opacity_in: [0, 1, { start: 0.25, end: 0.3 }],
+          messageB_opacity_in: [0, 1, { start: 0.6, end: 0.65 }],
+          messageC_opacity_in: [0, 1, { start: 0.87, end: 0.92 }],
+          messageA_translateY_out: [0, -20, { start: 0.4, end: 0.45 }],
+          messageB_translateY_out: [0, -20, { start: 0.68, end: 0.73 }],
+          messageC_translateY_out: [0, -20, { start: 0.95, end: 1 }],
+          messageA_opacity_out: [1, 0, { start: 0.4, end: 0.45 }],
+          messageB_opacity_out: [1, 0, { start: 0.68, end: 0.73 }],
+          messageC_opacity_out: [1, 0, { start: 0.95, end: 1 }],
+          pinB_scaleY: [0.5, 1, { start: 0.6, end: 0.65 }],
+          pinC_scaleY: [0.5, 1, { start: 0.87, end: 0.92 }],
+        },
+      },
+
+      {
+        // 3
+        type: "sticky",
+        heightNum: 5,
+        scrollHeight: 0,
+        objs: {
+          container: document.querySelector("#scroll-section-3"),
+          canvasCaption: document.querySelector(".canvas-caption"),
+          canvas: document.querySelector(".image-blend-canvas"),
+          context: document
+            .querySelector(".image-blend-canvas")
+            .getContext("2d"),
+          imagesPath: ["./blend-image-1.jpg", "./blend-image-2.jpg"],
+          images: [], //이미지 객체를 여기에 push
+        },
+        values: {
+          rect1X: [0, 0, { start: 0, end: 0 }],
+          rect2X: [0, 0, { start: 0, end: 0 }],
+        },
+      }
+    ];
 
     function setCanvasImages() {    //canvas에 그려서 처리할 이미지 함수
         let imgElem;
         for(let i=0; i<sceneInfo[0].values.videoImageCount; i++) {
-            imgElem = document.createElement('img'); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
+            imgElem = new Image(); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
             imgElem.src = `./001/IMG_${6726 + i}.JPG` //imgElem의 주소 설정 및 img 반복 설정
             sceneInfo[0].objs.videoImages.push(imgElem); //배열에 해당 img를 push
         }
@@ -142,9 +148,17 @@
         //3번째 섹션의 그림 설정
         let imgElem2;
         for(let i=0; i<sceneInfo[2].values.videoImageCount; i++) {
-            imgElem2 = document.createElement('img'); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
+            imgElem2 = new Image(); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
             imgElem2.src = `./002/IMG_${7027 + i}.JPG` //imgElem의 주소 설정 및 img 반복 설정
             sceneInfo[2].objs.videoImages.push(imgElem2); //배열에 해당 img를 push
+        }
+
+        let imgElem3;
+        for (let i = 0; i < sceneInfo[3].objs.imagesPath.length; i++) {
+          imgElem3 = new Image(); // = imgElem = new Image(); 둘다 같은 방법 : 이미지 객체 생성
+          imgElem3.src = sceneInfo[3].objs.imagesPath[i];
+          sceneInfo[3].objs.images.push(imgElem3); //배열
+         
         }
         
     }
@@ -340,10 +354,55 @@
                  break;
 
             case 3:
+               
+                //가로세로 모두 꽉차게 하기 위해 여기서 세팅
+                const widthRatio = window.innerWidth / objs.canvas.width; //윈도우/캔버스
+                const heightRatio = window.innerHeight / objs.canvas.height;
+                
+                let canvasScaleRatio;
 
-                 break;
+                //크기조절을 다르게 설정 
+                if(widthRatio <= heightRatio){
+                    //캔버스보다 브라우저창이 홀쭉한 경우 
+                    canvasScaleRatio = heightRatio;
+                } else {
+                  //캔버스보다 브라우저창이 납작한 경우
+                  canvasScaleRatio = widthRatio;
+                }
+
+                objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+                objs.context.drawImage(objs.images[0], 0, 0);
+
+                //캔버스 사이즈에 맞춰 가정한 innerwidth와  innerheight
+                const recalculatedInnerWidth = window.innerWidth / canvasScaleRatio;
+                const recalculatedInnerHeight= window.innerHeight/ canvasScaleRatio;
+            
+                const whiteRectWidth = recalculatedInnerWidth * 0.15; //15%기준으로 박스 생성
+                values.rect1X[0] = (objs.canvas.width - recalculatedInnerWidth) / 2;//전체에서 빼서 반으로 나눔 = 한쪽 15%박스를 선택하는것                
+                values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
+                values.rect2X[0] = values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
+                values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+
+                    // 좌우 흰색 박스 그리기
+                objs.context.fillRect(
+                    parseInt(values.rect1X[0]), //x축
+                    0,//y축
+                    parseInt(whiteRectWidth), //width
+                    objs.canvas.height//height
+                );
+                objs.context.fillRect(
+                    parseInt(values.rect2X[0]),
+                    0,
+                    parseInt(whiteRectWidth),
+                    objs.canvas.height
+                );
+            
+                
+         }
+       
+         break;
         }
-   }
+    
 
 
 
