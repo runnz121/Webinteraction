@@ -133,7 +133,9 @@
         values: {
           rect1X: [0, 0, { start: 0, end: 0 }],
           rect2X: [0, 0, { start: 0, end: 0 }],
-        },
+          imageBlendY: [0, 0, { start: 0, end: 0 }],
+          rectStartY: 0 //시작 기준점
+        }
       }
     ];
 
@@ -351,14 +353,66 @@
                 objs.pinC.style.transform = `scaleY(${calcValues(values.pinC_scaleY, currentYOffset)})`;
             }
 
+            //currentScene 3에서 쓰는 캔버스를 미리 그려주기 시작   
+            if (scrollRatio > 0.9) { //0.9 이상부터라고 if문 안에다가 붙여넣으면 변수 충돌 안남 
+              const objs = sceneInfo[3].objs; //지역변수로 지정
+              const values = sceneInfo[3].values; //지역변수로 지정
+              const widthRatio = window.innerWidth / objs.canvas.width; //윈도우/캔버스
+              const heightRatio = window.innerHeight / objs.canvas.height;
+              let canvasScaleRatio;
+
+              //크기조절을 다르게 설정
+              if (widthRatio <= heightRatio) {
+                //캔버스보다 브라우저창이 홀쭉한 경우
+                canvasScaleRatio = heightRatio;
+              } else {
+                //캔버스보다 브라우저창이 납작한 경우
+                canvasScaleRatio = widthRatio;
+              }
+
+              objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+              objs.context.fillStyle = "white"; //  fillStyle박스 색깔 바꿈
+              objs.context.drawImage(objs.images[0], 0, 0);
+
+              //캔버스 사이즈에 맞춰 가정한 innerwidth와  innerheight
+              const recalculatedInnerWidth =
+                document.body.offsetWidth / canvasScaleRatio; //스크롤바 제외한 값을 구하기 위해 window.innerwidth대신 씀
+              const recalculatedInnerHeight =
+                window.innerHeight / canvasScaleRatio;
+
+              const whiteRectWidth = recalculatedInnerWidth * 0.15; //15%기준으로 박스 생성
+              values.rect1X[0] =
+                (objs.canvas.width - recalculatedInnerWidth) / 2; //전체에서 빼서 반으로 나눔 = 한쪽 15%박스를 선택하는것
+              values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
+              values.rect2X[0] =
+                values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
+              values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+
+              // 좌우 흰색 박스 그리기
+              objs.context.fillRect(
+                parseInt(values.rect1X[0]),
+                0,
+                parseInt(whiteRectWidth),
+                objs.canvas.height
+              );
+              objs.context.fillRect(
+                parseInt(values.rect2X[0]),
+                0,
+                parseInt(whiteRectWidth),
+                objs.canvas.height
+              );
+            }
+
+
                  break;
 
             case 3:
                
+                let step = 0; //단계를 나눠서 처리하기 위한 초긱밧
+
                 //가로세로 모두 꽉차게 하기 위해 여기서 세팅
                 const widthRatio = window.innerWidth / objs.canvas.width; //윈도우/캔버스
                 const heightRatio = window.innerHeight / objs.canvas.height;
-                
                 let canvasScaleRatio;
 
                 //크기조절을 다르게 설정 
@@ -371,11 +425,25 @@
                 }
 
                 objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+                objs.context.fillStyle = 'white'; //  fillStyle박스 색깔 바꿈
                 objs.context.drawImage(objs.images[0], 0, 0);
 
                 //캔버스 사이즈에 맞춰 가정한 innerwidth와  innerheight
-                const recalculatedInnerWidth = window.innerWidth / canvasScaleRatio;
+                const recalculatedInnerWidth = document.body.offsetWidth / canvasScaleRatio; //스크롤바 제외한 값을 구하기 위해 window.innerwidth대신 씀
                 const recalculatedInnerHeight= window.innerHeight/ canvasScaleRatio;
+
+                //에니메이션 시작 부분
+                if (!values.rectStartY) {
+                  //이 매서드는 DOM의 정보를 불러온다, 한번 셋팅되면 다시 실행 안됨
+                //   values.rectStartY = objs.canvas.getBoundingClientRect().top; //스크롤 순간에 잡아냄으로 속도에 따라서 값이 변함
+                  values.rectStartY = objs.canvas.offsetTop //고정된값이기 때문에 스크롤 속도에 상관없이 값이 고정
+                  + (objs.canvas.height - objs.canvas.height * canvasScaleRatio)/2;
+                  values.rect1X[2].start = (window.innerHeight / 2) / scrollHeight; //창사이즈 절반 높이부터 시작(왼쪽박스)
+                  values.rect2X[2].start = (window.innerHeight / 2) / scrollHeight; //창사이즈 절반 높이부터 시작(오른쪽박스)
+                  values.rect1X[2].end = values.rectStartY / scrollHeight; //end시점 결정(왼쪽박스)
+                  values.rect2X[2].end = values.rectStartY / scrollHeight; //end시점 결정(오른쪽박스)
+                }
+                
             
                 const whiteRectWidth = recalculatedInnerWidth * 0.15; //15%기준으로 박스 생성
                 values.rect1X[0] = (objs.canvas.width - recalculatedInnerWidth) / 2;//전체에서 빼서 반으로 나눔 = 한쪽 15%박스를 선택하는것                
@@ -384,24 +452,30 @@
                 values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
 
                     // 좌우 흰색 박스 그리기
-                objs.context.fillRect(
-                    parseInt(values.rect1X[0]), //x축
-                    0,//y축
-                    parseInt(whiteRectWidth), //width
-                    objs.canvas.height//height
-                );
-                objs.context.fillRect(
-                    parseInt(values.rect2X[0]),
-                    0,
-                    parseInt(whiteRectWidth),
-                    objs.canvas.height
-                );
-            
+                objs.context.fillRect(parseInt(calcValues(values.rect1X, currentYOffset)),0,
+                parseInt(whiteRectWidth), objs.canvas.height);
+                objs.context.fillRect(parseInt(calcValues(values.rect2X, currentYOffset)),0,
+                parseInt(whiteRectWidth), objs.canvas.height);
+
+                if(scrollRatio < values.rect1X[2].end) {//캔버스가 브라우저 상단에 닿지 않았다면)
+                    step = 1;
+                    objs.canvas.classList.remove("sticky"); //css sticky
+                } else {
+                    step = 2;
+                    //imageBlendY: [0,0,{start: 0, end: 0}]
+                    //이미지 블랜드
+                    objs.context.drawImage(objs.images[1], 0, 200);
+                    objs.canvas.classList.add("sticky");
+                    objs.canvas.style.top =`${-(objs.canvas.height - objs.canvas.height * canvasScaleRatio)/2}px`; //마이너스 방향으로 땡김
+                }
+                
+             break;
                 
          }
        
-         break;
-        }
+        
+        
+    }
     
 
 

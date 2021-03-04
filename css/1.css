@@ -244,10 +244,10 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
 }
 
 
-.image-blend-canvas.sticky {
-	position: fixed;
+.image-blend-canvas.sticky{ /*이미지 고정*/
+    position: fixed;
 	top: 0;
-	z-index: 10;
+
 }
 
 #scroll-section-3 {
