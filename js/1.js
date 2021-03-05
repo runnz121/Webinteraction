@@ -463,7 +463,7 @@
                 } else {
                     step = 2;
                     //imageBlendY: [0,0,{start: 0, end: 0}]
-                    //이미지 블랜드
+                    //이미지 블랜드11
                     objs.context.drawImage(objs.images[1], 0, 200);
                     objs.canvas.classList.add("sticky");
                     objs.canvas.style.top =`${-(objs.canvas.height - objs.canvas.height * canvasScaleRatio)/2}px`; //마이너스 방향으로 땡김
