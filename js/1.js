@@ -133,8 +133,12 @@
         values: {
           rect1X: [0, 0, { start: 0, end: 0 }],
           rect2X: [0, 0, { start: 0, end: 0 }],
-          imageBlendY: [0, 0, { start: 0, end: 0 }],
+          blendHeight: [0, 0, { start: 0, end: 0 }],//이미지 블랜드 처리
+          canvas_scale: [0, 0, { start: 0, end: 0 }],//이미지 축소 처리
+          canvasCaption_opacity : [0,1,{start:0, end: 0}],//메시지 투명도 처리
+          canvasCaption_translateY: [20,1,{start:0, end: 0}], //메시지 이동 처리
           rectStartY: 0 //시작 기준점
+
         }
       }
     ];
@@ -168,7 +172,13 @@
 
 
 
-    
+    function checkMenu() {
+        if (yOffset > 44) { //44px은 맨 위의 탑 메뉴 높이가 44px이기 때문 (global-nav)
+            document.body.classList.add('local-nav-sticky');
+        } else {
+            document.body.classList.remove('local-nav-sticky');
+        }
+    }
 
     function setLayout() { //각 스크롤 섹션의 높이셋팅하는 함수
         for(let i=0; i< sceneInfo.length; i++) {
@@ -464,9 +474,63 @@
                     step = 2;
                     //imageBlendY: [0,0,{start: 0, end: 0}]
                     //이미지 블랜드11
-                    objs.context.drawImage(objs.images[1], 0, 200);
+                    values.blendHeight[0] = 0;
+                    values.blendHeight[1] = objs.canvas.height;
+                    values.blendHeight[2].start = values.rect1X[2].end ; //첫번째 애니메이션 끝나는 시점을 2번째 애니메이션 시작시점으로 설정
+                    values.blendHeight[2].end = values.blendHeight[2].start + 0.2;//애니메이션 시작, 끝점 설정으로 scroll 속도를 설정 할 수 있다.
+
+
+                    const blendHeight = calcValues(values.blendHeight, currentYOffset);
+                    objs.context.drawImage(//이미지 크기와 캔버스 크기가 같으면 설정이 편하다
+                        objs.images[1], 
+                        0, objs.canvas.height - blendHeight, objs.canvas.width,  blendHeight,// 이미지크기
+                        0, objs.canvas.height - blendHeight, objs.canvas.width,  blendHeight // 캔버스크기
+                        
+                                             
+                        );
                     objs.canvas.classList.add("sticky");
                     objs.canvas.style.top =`${-(objs.canvas.height - objs.canvas.height * canvasScaleRatio)/2}px`; //마이너스 방향으로 땡김
+
+
+
+                    //이미지 축소 처리
+                    if(scrollRatio > values.blendHeight[2].end) {
+                        values.canvas_scale[0] = canvasScaleRatio; //초기값
+                        values.canvas_scale[1] = document.body.offsetWidth / (1.5 * objs.canvas.width);//이미지 축소 정도 처리
+
+
+                        values.canvas_scale[2].start = values.blendHeight[2].end;
+                        values.canvas_scale[2].end = values.canvas_scale[2].start + 0.2; //20%정도 되는 구간 차지
+
+                        objs.canvas.style.transform = `scale(${calcValues(values.canvas_scale, currentYOffset)})`;
+                        objs.canvas.style.marginTop = 0; //margin-top 을 0으로 해줌으로서 아래 조건이 아닐 경우에 이미지가 계속 보이게끔 해준다
+                    }
+
+                    //2번째 이미지 축소 끝난 후 fix풀어주는 지점 설정
+                    if(scrollRatio > values.canvas_scale[2].end
+                        && values.canvas_scale[2].end > 0) {
+                        //console.log('스크롤 시작');
+                        //scroll 내린값만큼 margin-top을 주면 고정되어있는 것처럼 보인다
+                        //위에서 0.2로 지정해 주었기 때문에 그 2배만큼(이미지 총 2개) 지정
+                        objs.canvas.classList.remove("sticky"); //고정값 풀어줌
+                        objs.canvas.style.marginTop = `${scrollHeight * 0.4}px`;
+
+                        //이미지 아래의 문장 처리
+                        values.canvasCaption_opacity[2].start = values.canvas_scale[2].end;
+                        values.canvasCaption_opacity[2].end = values.canvasCaption_opacity[2].start + 0.1;
+
+                        //문장 시작 점 설정
+                        values.canvasCaption_translateY[2].start = values.canvasCaption_opacity[2].start;
+                        values.canvasCaption_translateY[2].end = values.canvasCaption_opacity[2].end;
+
+                        objs.canvasCaption.style.opacity = calcValues(values.canvasCaption_opacity, currentYOffset);
+                        objs.canvasCaption.style.transform = `translate3d(
+                            0, 
+                            ${calcValues(values.canvasCaption_translateY, currentYOffset)}%, 
+                            0)`;
+
+                        
+                    }
                 }
                 
              break;
@@ -523,6 +587,7 @@
     window.addEventListener('scroll', () => {
         yOffset = window.pageYOffset; //yoffset을 갱신해줌 편의상 변수로 만듬
         scrollLoop();
+        checkMenu(); //탑메뉴 설정
     });
     // window.addEventListener(`DOMContentLoaded`, setLayout);//htML 콘텐트만 로딩되면 바로 시작
     window.addEventListener('load', () => {         //익명함수로 여러 함수 호출

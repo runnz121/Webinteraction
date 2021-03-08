@@ -54,10 +54,12 @@ a {
     z-index: 11;
 }
 
-.local-nav-sticky .local-nav {
+
+.local-nav-sticky .local-nav { /*아래 고정되는 탑 메뉴*/
     position: fixed;
     top: 0;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255,255,255, 0.1);
+    backdrop-filter : saturate(180%) blur(15px)/*뿌옇게 처리 가능하게함*/
 }
 
 .local-nav-links,
@@ -193,7 +195,7 @@ a {
     color: #888;
     font-size:1.2rem;
     max-width:1000px;
-    margin: 0 auto;
+    margin: -8rem auto 0;
 }
 
 /*footer ----*/
@@ -268,7 +270,7 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
     }
 
     .description {
-        
+        padding: 0;
         font-size: 2rem;  
              
     }
@@ -301,9 +303,12 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
 
     .mid-message {
         font-size: 4vw;
+        width : 1000px;
+        padding:0;
     }
     .canvas-caption {
         font-size: 2rem;
+        padding:0;
     }
 }
 
