@@ -582,7 +582,7 @@
     }   
    
 
-
+//이벤트 함수 모음
     window.addEventListener('resize',setLayout); //윈도우 창이 변할때 setLayout 함수 실행
     window.addEventListener('scroll', () => {
         yOffset = window.pageYOffset; //yoffset을 갱신해줌 편의상 변수로 만듬
