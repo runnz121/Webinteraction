@@ -287,6 +287,8 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
      fill: transparent; /*투명으로 채움*/
  }
 
+
+ /*반응형 css*/
 @media (min-width : 1024px) { /*창크기가 1024px이상시 하위 css가 적용된다*/
 
     #scroll-section-0 h1 {
