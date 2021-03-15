@@ -276,16 +276,38 @@ body#show-scene-3 #scroll-section-3 .sticky-elem {
     
  }
 
- .loading-circle {
-     width: 54px;
-     height: 54px;
+
+ @keyframes loading-spin {
+    100% { transform: rotate(360deg);} /*회전 처리*/
+}
+
+ @keyframes loading-circle-ani {
+    0% { stroke-dashoffset: 157;}
+    75% { stroke-dashoffset: -147;}
+    100% { stroke-dashoffset: -157;}
  }
+
+ .loading-circle {
+    width: 54px;
+    height: 54px;
+    animation: loading-spin 3s infinite;
+}
+
 
  .loading-circle circle {
      stroke: black;
      stroke-width: 4;
+     /* getTotalLength() 로 stroke의 길이를 얻어 올 수 있다 */
+     stroke-dasharray: 157;
+     stroke-dashoffset: 0;
      fill: transparent; /*투명으로 채움*/
+     animation: loading-circle-ani 1s infinite; /*반복 작용*/
+     /* transition: 1s; */
  }
+/* 
+ .loading-circle:hover circle {
+     stroke-dashoffset: -157;
+ } */
 
 
  /*반응형 css*/
