@@ -656,16 +656,11 @@
                             ${calcValues(values.canvasCaption_translateY, currentYOffset)}%, 
                             0)`;
 
-
                     }
                 }
 
                 break;
-
         }
-
-
-
     }
 
 
@@ -742,33 +737,76 @@
     window.addEventListener('resize', setLayout); //윈도우 창이 변할때 setLayout 함수 실행
 
 
-    window.addEventListener('scroll', () => {
-        yOffset = window.pageYOffset; //yoffset을 갱신해줌 편의상 변수로 만듬
-        scrollLoop();
-        checkMenu(); //탑메뉴 설정
+    // window.addEventListener('scroll', () => {
+    //     yOffset = window.pageYOffset; //yoffset을 갱신해줌 편의상 변수로 만듬
+    //     scrollLoop();
+    //     checkMenu(); //탑메뉴 설정
 
-        //rafstate가 true일 경우 스크롤시 requestAnimationFrame 재적용위한if문
-        if (!rafState) {
-            rafId = requestAnimationFrame(loop);
-            rafState = true;
-        }
-
-
-    });
+    //     //rafstate가 true일 경우 스크롤시 requestAnimationFrame 재적용위한if문
+    //     if (!rafState) {
+    //         rafId = requestAnimationFrame(loop);
+    //         rafState = true;
+    //     }
+    // });
     // window.addEventListener(`DOMContentLoaded`, setLayout);//htML 콘텐트만 로딩되면 바로 시작
     window.addEventListener('load', () => { //익명함수로 여러 함수 호출
+        //load 완료되면 before-load css 클래스 삭제 되게끔 구현
+        document.body.classList.remove('before-load');
+        //document.body.removeChild(document.querySelector('.loading))으로 쓰게되면 transition이 바로 삭제되어 부드럽게 삭제 안됨 
         setLayout();
         sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0); //새로고침시 이미지 처음 그리고 시작 하기 위한 설정
+        
+        //초기화 시점을 로드가 끝난후로 잡아줌으로서 스크롤시 에러 안나게끔 수정
+        window.addEventListener('scroll', () => {
+            yOffset = window.pageYOffset; //yoffset을 갱신해줌 편의상 변수로 만듬
+            scrollLoop();
+            checkMenu(); //탑메뉴 설정
+    
+            //rafstate가 true일 경우 스크롤시 requestAnimationFrame 재적용위한if문
+            if (!rafState) {
+                rafId = requestAnimationFrame(loop);
+                rafState = true;
+            }
+        });
+
+        //로드 후 초기화 시키게끔 바꿔줌 
+        window.addEventListener('resize', () => {
+            if(window.innerWidth > 900) {
+                setLayout();
+                //초기화 기준을 setlayout과 맞추기 위해 resize안으로 옮겨줌 
+                sceneInfo[3].values.rectStartY = 0; //창사이즈 변환시 초기화 하게끔 재설정해줌 그러므로 창 변환해도 부드럽게 함수 적용
+            }
+    
+            // sceneInfo[3].values.rectStartY = 0; //창사이즈 변환시 초기화 하게끔 재설정해줌 그러므로 창 변환해도 부드럽게 함수 적용
+        }); //윈도우 창 재 조절시 이벤트 발생
+
+        //로드후 초기화 시키게끔 바꿔줌
+         //orientationchange : 스마트폰 가로세로 변환시 일어나는 이벤트 
+         //setlayout을 한템포 늦춰서 실행함으로서 모든 셋팅이 완료된후 동작하게끔 구현 
+        window.addEventListener('orientationchange', () => {
+            setTimeout(setLayout, 500);
+        });
+   
+        document.querySelector('.loading').addEventListener('transitionend', (e) => {
+            document.body.removeChild(e.currentTarget);
+        });
     }); //윈도우 로드됫리 이벤트 발생
-    window.addEventListener('resize', () => {
-        if(window.innerWidth > 600) {
-            setLayout();
-        }
+    // window.addEventListener('resize', () => {
+    //     if(window.innerWidth > 600) {
+    //         setLayout();
+    //     }
 
-        sceneInfo[3].values.rectStartY = 0; //창사이즈 변환시 초기화 하게끔 재설정해줌 그러므로 창 변환해도 부드럽게 함수 적용
-    }); //윈도우 창 재 조절시 이벤트 발생
+    //     sceneInfo[3].values.rectStartY = 0; //창사이즈 변환시 초기화 하게끔 재설정해줌 그러므로 창 변환해도 부드럽게 함수 적용
+    // }); //윈도우 창 재 조절시 이벤트 발생
 
-    window.addEventListener('orientationchange', setLayout); //orientationchange : 스마트폰 가로세로 변환시 일어나는 이벤트 
+    // window.addEventListener('orientationchange', setLayout); //orientationchange : 스마트폰 가로세로 변환시 일어나는 이벤트 
+    
+    //transitionend이벤트를 이용해 transition이 있는 객체가 끝나면 실행되게끔 구현
+    //class before-load를 제거해줌
+    //currentTarget = .loading을 가르킴
+    // document.querySelector('.loading').addEventListener('transitionend', (e) => {
+    //         document.body.removeChild(e.currentTarget);
+    //     });
 
         setCanvasImages();
 
